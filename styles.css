@@ -1,0 +1,82 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding-top: 100px;
+    width: 100%;
+    height: 100%;
+}
+
+.arena {
+    display: flex;
+    width: 100%;
+}
+
+.challenger {
+    font-size: 32px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.player, .enemy {
+    /* border: 1px solid black; */
+    /* background-color: aliceblue; */
+    margin: 5px;
+    padding: 20px;
+    width: 50%;
+}
+
+.hp {
+    display: flex;
+    height: 100%;
+    /* width: 100%; */
+    background-color: rgb(10, 160, 10);
+    padding: 10px;
+    font-size: 24px;
+    text-align: center;
+    vertical-align: middle;
+
+}
+.health-bar {
+    background-color: rgb(206, 206, 206);
+    height: 50px;
+    width: 100%;
+}
+
+.options {
+    display: flex;
+    background-color: white;
+    margin: 10px;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 5px 5px 20px black;
+}
+.btn{
+    font-size: 28px;
+    padding: 20px;
+    margin: 20px;
+}
+
+.log {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* height: auto; */
+    /* max-height: 500px; */
+    padding: 20px;
+}
+
+.record {
+    /* display: block; */
+    background-color: turquoise;
+    color: black;
+    width: 100%;
+    text-shadow: 2px 2px 2px white;
+    text-decoration: none;
+    text-align: center; 
+    margin: 10px;
+    padding: 5px;
+}

@@ -6,9 +6,41 @@
     <title>VueJS2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-    <script src="script.js"></script>
+    <div data-behaviour="container" class="container">
+        <div class="arena">
+            <div class="player ">
+                <p class="challenger">Hero</p>
+                <p class="health-bar">
+                    <span :style="renderHeroHP" class="hp">{{ heroHP }}</span>
+                </p>
+            </div>
+            <div class="enemy ">
+                <p class="challenger">Monster</p>
+                <p class="health-bar">
+                    <span :style="renderMonsterHP" class="hp">{{ monsterHP }}</span>
+                </p>
+            </div>
+        </div>
+        
+        <div v-if="!begin" class="options ">
+            <button @click="begin = !begin" class="start-btn btn btn-success">Start Game</button>
+        </div>
+
+        <div v-else class="options ">
+            <button @click="attack()" class="attack-btn btn btn-warning">Attack</button>
+            <button @click="special()" class="special-attack-btn btn btn-danger">Special Attack</button>
+            <button @click="heal()" class="heal-btn btn btn-success">Heal</button>
+            <button @click="surrender()" class="surrender-btn btn btn-dark">Surrender</button>
+        </div>
+
+        <div v-if="begin" class="options log">
+            <span class="record" v-for="move in log.logs">{{ move }}</span>
+        </div>
+    </div>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

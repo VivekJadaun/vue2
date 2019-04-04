@@ -1,8 +1,8 @@
 <template>
     <div class="container col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
-        <transition>
-            <question :question="question" :options="options" v-if="showQuestion"></question>
-            <answer v-else></answer>
+        <transition name="flip" mode="out-in">
+            <question mode="in-out" :question="question" :options="options" v-if="showQuestion"></question>
+            <answer mode="in-out" v-else></answer>
         </transition>
     </div>
 </template>
@@ -76,5 +76,37 @@ export default {
 </script>
 
 <style>
+    .flip-enter {
+        /*transform: rotateY(0deg);*/
+    }
 
+    .flip-enter-active {
+        animation: flip-in  0.5s ease-out forwards;
+    }
+
+    .flip-leave {
+        /*transform: rotateY(0deg);*/
+    }
+
+    .flip-leave-active {
+        animation: flip-out 0.5s ease-out forwards;
+    }
+
+    @keyframes flip-out {
+        from {
+            transform: rotateY(0deg);
+        }
+        to {
+            transform: rotateY(90deg);
+        }
+    }
+
+    @keyframes flip-in {
+        from {
+            transform: rotateY(90deg);
+        }
+        to {
+            transform: rotateY(0deg);
+        }
+    }
 </style>

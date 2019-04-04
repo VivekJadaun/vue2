@@ -24,6 +24,7 @@ export default {
     .card-body {
         text-align: center;
         text-shadow: 2px 2px 8px black;
+        /* height: 200px; */
     }
 
     hr {

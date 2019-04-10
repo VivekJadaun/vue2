@@ -1,5 +1,6 @@
 let vue = new Vue({
-    el: '',
-    data: {},
-    computed: {}
+    el: '#app',
+    data: data,
+    computed: {},
+    methods: {}
 });

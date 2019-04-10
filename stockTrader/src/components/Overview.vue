@@ -8,7 +8,7 @@
                 Click on 'End Day' to refresh Stock Prices & begin a new day
             </p>
         </div>
-        <div class="card-footer row bg-primary text-white"><span><b>Your Funds:</b> {{ getFunds }}</span></div>
+        <div class="card-footer row bg-primary text-white"><span><b>Your Funds:</b> ₹ {{ getFunds }}</span></div>
     </div>
 </template>
 

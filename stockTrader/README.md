@@ -2,6 +2,8 @@
 
 > A Vue.js project
 
+CHECKOUT THE DEPLOYED SITE:  https://stock-trader-77ad0.firebaseapp.com
+
 ## Build Setup
 
 ``` bash

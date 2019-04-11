@@ -1,19 +1,9 @@
 import Vue from 'vue';
 import App from './App.vue';
-import Quote from "./components/Quote.vue";
-import Progress from "./components/Progress.vue";
-import NewQuote from "./components/NewQuote.vue";
-import Grid from "./components/Grid.vue";
-
-Vue.component('quote', Quote);
-Vue.component('quotesProgress', Progress);
-Vue.component('newQuote', NewQuote);
-Vue.component('quotesGrid', Grid);
-
-
-export const eventBus = new Vue();
+import { store } from "./store/store";
 
 new Vue({
   el: '#app',
+  store,
   render: h => h(App)
 })

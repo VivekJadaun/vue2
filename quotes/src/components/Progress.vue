@@ -3,30 +3,28 @@
         <span>Quotes Added</span>
         <div class="progress">
             <div class="progress-bar bg-primary" role="progressbar" :style="progressBarStyle" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100">
-                {{ quote_count }}/{{ total_count }}
+                {{ getQuotesCount }}/{{ getMaxQuotes }}
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
     computed: {
+        ...mapGetters([
+            'getQuotesCount',
+            'getMaxQuotes',
+        ]),
         progressBarStyle() {
             return {
-                width: this.quote_count * 10 + '%'
+                width: this.getQuotesCount * 10 + '%'
             }
         }
     },
-    props: {
-        'quote_count': {
-            type: Number,
-            required: true
-        },
-        'total_count': {
-            type: Number,
-            default: 10
-        }
+    methods: {
     }
 }
 </script>
@@ -35,19 +33,12 @@ export default {
 .progress-bar {
     font-size: 14px;
     min-width: 0;
-    padding: 2px;
     text-shadow: 1px 1px 3px #888;
-}
-
-.progress-bar[aria-valuenow="1"] {
     color: black;
 }
+
 .quotes-progress {
     margin: 10px;
-}
-
-.progress-bar{
-    padding: 5px;
 }
 
 </style>

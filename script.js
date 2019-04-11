@@ -1,21 +1,19 @@
 import Player from './Player.js';
 import Log from './Log.js';
+import { gameplayOptions } from "./gameplay_constants.js";
 
 let log = new Log;
-let hero = new Player('hero');
-let monster = new Player('monster', 150);
+let hero = new Player('hero', gameplayOptions.heroHP);
+let monster = new Player('monster', gameplayOptions.monsterHP);
 
 let vue = new Vue({
     el: '[data-behaviour=container]',
     data: {
+        ...gameplayOptions,
         begin: false,
         hero: hero,
-        heroHP: hero.hp,
         monster: monster,
-        monsterHP: monster.hp,
         log: log,
-        attackPower: 10,
-        specialAmp: 5
     },
     computed: {
         renderHeroHP() {
@@ -44,24 +42,25 @@ let vue = new Vue({
         }
     },
     methods: {
-        attack() {
+        normal() {
             let heroAttack = Math.round(Math.random() * this.attackPower);
             let monsterAttack = Math.round(Math.random() * this.attackPower);
-            this.monsterHP = this.monster.hurt(heroAttack);
-            this.log.push(`Hero attacked Monster for ${heroAttack}`);
-            this.heroHP = this.hero.hurt(monsterAttack);
-            this.log.push(`Monster attacked Hero for ${monsterAttack}`);
+            this.attack(heroAttack, monsterAttack);
         },
         
         special() {
             let heroAttack = Math.round(Math.random() * this.attackPower + this.specialAmp);
             let monsterAttack = Math.round(Math.random() * this.attackPower + this.specialAmp);
+            this.attack(heroAttack, monsterAttack);
+        },
+        
+        attack(heroAttack, monsterAttack) {
             this.monsterHP = this.monster.hurt(heroAttack);
             this.log.push(`Hero attacked Monster for ${heroAttack}`);
             this.heroHP = this.hero.hurt(monsterAttack);
             this.log.push(`Monster attacked Hero for ${monsterAttack}`);
         },
-        
+
         heal() {
             let heroHeal = Math.round(Math.random() * this.attackPower + this.specialAmp);
             let monsterAttack = Math.round(Math.random() * this.attackPower);
@@ -73,7 +72,6 @@ let vue = new Vue({
 
         surrender() {
             this.begin = false;
-            this.witnessing = false
             this.heroHP = this.hero.revive();
             this.monsterHP = this.monster.revive();
             this.log.clear();

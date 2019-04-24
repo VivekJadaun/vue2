@@ -20,26 +20,12 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  data() {
-    return {
-      // name: '',
-      // launched: false,
-    }
-  },
   computed: {
     ...mapGetters([
       'getName',
       'getId',
       'getQuiz',
     ]),
-  //   name: {
-  //     get() {
-  //       this.$store.getters.getName;
-  //     },
-  //     set(value) {
-  //       this.$store.dispatch('updateName', value);
-  //     },
-  //   },
   },
   methods: {
     ...mapActions([
@@ -49,8 +35,6 @@ export default {
     
     launch() {    
       if (!this.getName) {
-        // window.alert('Name is required');
-        // return;
         this.updateName('John Doe');
       }
       if (!this.getId) {

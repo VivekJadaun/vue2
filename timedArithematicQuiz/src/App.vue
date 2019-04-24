@@ -16,12 +16,6 @@ import { mapGetters } from 'vuex';
 
 
 export default {
-  data() {
-    return {
-      // quiz: window.localStorage.getItem('quizes') || 1,
-      // quiz: 1,
-    }
-  },
   computed: {
     ...mapGetters([
       'getQuizIds'

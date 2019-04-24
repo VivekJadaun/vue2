@@ -7,10 +7,6 @@ const DEFAULT_STATE = quizInfo.quiz;
 
 export const store = new Vuex.Store({
   state: {
-    // name: window.localStorage.getItem('name') || '',
-    // id: window.localStorage.getItem('id'),
-    // quiz: window.localStorage.getItem('quiz') || 1,
-    // ...DEFAULT_STATE,
     ...quizInfo,
     ...window.localStorage,
   },
@@ -42,7 +38,6 @@ export const store = new Vuex.Store({
       window.localStorage.setItem('id', payload);
     },
     updateQuiz: (state) => {
-      // state.quiz = payload;
       window.localStorage.setItem('quiz', state.quiz);
     },
     addQuiz: (state) => {
@@ -61,56 +56,22 @@ export const store = new Vuex.Store({
         window.alert('Can\'t remove the last quiz');
       }
     },
-    resetAll: (state) => {
-      window.localStorage.clear();
-      // for (const key in state) {
-        // if (state.hasOwnProperty(key)) {
-        // state[key] = null;
-        // }
-      // }
-      // for (const prop of Object.getOwnPropertyNames(state)) {
-      //   delete state[prop];
-      // }
-      // delete state;
-      state = quizInfo;
-      // console.log(quizInfo);
-      // console.log('in mutation resetall', state);
-      
-      // state.replaceState(quizInfo);
-    },
     updateCurrentQues: (state, payload) => {
       let quiz = JSON.parse(state.quiz);
-      // console.log(quiz.find(el => el.id == payload).currentQues);
       quiz.find(el => el.id == payload).currentQues += 1;
-      // console.log(quiz.find(el => el.id == payload).currentQues);
-      // console.log(quiz);
       state.quiz = JSON.stringify(quiz);
-      // console.log(state.quiz);
-      // let current_ques = JSON.parse(state.quiz).currentQues;
-      // current_ques = Number(current_ques);
-      // ++current_ques;
-      // state.quiz =       
     },
     updateTotalQues: (state, payload) => {
       let quiz = JSON.parse(state.quiz);
-      // quiz[payload.id - 1].interval = payload.interval;
-      // state.quiz = JSON.stringify(quiz);
-      // let quiz = JSON.parse(state.quiz).find(el => el.id == payload.id);
-      // console.log(quiz,payload);      
       quiz.find(el => el.id == payload.id).totalQues = payload.totalQues;
       state.quiz = JSON.stringify(quiz);
-      // console.log(state.quiz);
     },
     updateInterval: (state, payload) => {
       let quiz = JSON.parse(state.quiz);
-      // console.log(quiz,payload);      
       quiz.find(el => el.id == payload.id).interval = payload.interval;
       state.quiz = JSON.stringify(quiz);
-      // console.log(state.quiz);
     },
     toggleNegativeMarking: (state, payload) => {
-      // let quiz = JSON.parse(state.quiz);
-      // quiz[payload.id - 1].negativeMarking = !quiz[payload.id - 1].negativeMarking;
       let quiz = JSON.parse(state.quiz);
       quiz.find(el => el.id == payload).negativeMarking = !quiz.find(el => el.id == payload).negativeMarking;
       state.quiz = JSON.stringify(quiz);
@@ -143,14 +104,6 @@ export const store = new Vuex.Store({
     removeQuiz: ({ commit }) => {
       commit('removeQuiz')
       commit('updateQuiz');        
-    },
-    resetAll: (context) => {
-      console.log('in action resetall');
-      // debugger
-      console.log(context.state);
-      // context.state = quizInfo;
-      // console.log(context.state);
-      context.commit('resetAll')
     },
     updateCurrentQues: ({ commit }, payload) => {
       commit('updateCurrentQues', payload);

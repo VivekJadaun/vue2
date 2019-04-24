@@ -60,17 +60,10 @@ export default {
   .nav-item {
     padding-left: 12px; 
   }
-  .nav-item span {
-    /* cursor: pointer; */
-  }
   .navbar {
     color: #fff;
     text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
     box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-    /* position: fixed; */
-    /* margin-top: 30px; */
-    /* border: 1px solid #ccc; */
-    /* border-radius: 4px; */
   }
   .navbar-brand {
     font-size: 24px;    
@@ -83,9 +76,7 @@ export default {
     background-color: transparent;  
 
   }
-
   .btn:hover {
-    /* background-color: #20c997;   */
     background-color: #007bff;  
   }
 </style>

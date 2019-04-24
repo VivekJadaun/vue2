@@ -23,10 +23,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  span {
-    /* padding: 10px; */
-    /* margin: 10px; */
-  }
-</style>

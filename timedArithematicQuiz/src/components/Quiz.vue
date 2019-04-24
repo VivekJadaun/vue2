@@ -13,10 +13,7 @@
           </span>
         </h5>
         <br>
-        <!-- <input type="text" :value="secsLeft"> -->
-        <!-- <h6 class="card-subtitle mb-2 text-muted">Q {{ getCurrentQues(this.quiz_id) }}</h6> -->
         <div class="input-group mb-3">
-          <!-- <span class="badge badge-light ">Q {{ getCurrentQues(this.quiz_id) }} :</span> -->
           <div class="input-group-prepend">
             <span class="input-group-text">Q {{ getCurrentQues(this.quiz_id) }}</span>
             <span class="input-group-text">{{ question }} =</span>
@@ -36,7 +33,6 @@
           </div>
           <div class="form-row ">
             <label for="interval" class="col-sm-6 col-form-label">Timer interval</label>
-            <!-- <input id="interval" type="number" class="form-control col-sm-6" placeholder="in seconds" v-model="interval"> -->
             <div class="input-group col-6">
               <input id="interval" type="number" class="form-control" :value="getInterval(quiz_id)" @input="updateInterval({id:quiz_id, interval:$event.target.value})" >
               <div class="input-group-append">
@@ -93,15 +89,11 @@
 </template>
 
 <script>
-// import { quizInfo } from "../constants";
 import timer from "./Timer.vue";
 import { mapGetters, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      // ...quizInfo,
-      // launched: !!window.localStorage.getItem('launchTime'),
-      // name: '',
       quiz_over: false,
       question: '',
       hint: '',
@@ -110,7 +102,6 @@ export default {
   watch: {
     getId() {
       this.setQuestion();
-      // console.log('in watcher, id changed',this.getInterval(this.quiz_id));      
       var stopwatch = setInterval(() => {
         if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
           this.checkAnswer();
@@ -144,32 +135,6 @@ export default {
       'getIncorrect',
       'getNotAnswered',
     ]),
-    
-    // interval: {
-    //   get() {
-    //     console.log(this.quiz_id);        
-    //     this.$store.getters.getInterval(this.quiz_id);
-    //   },
-    //   set(value) {
-    //     this.$store.dispatch('updateInterval', value);
-    //   }         
-    // }, 
-    // totalQues: {
-    //   get() {
-    //     this.$store.getters.getTotalQues(this.quiz_id);
-    //   },
-    //   set(value) {
-    //     this.$store.dispatch('updateTotalQues', value);
-    //   }         
-    // }, 
-    // negativeMarking: {
-    //   get() {
-    //     this.$store.getters.getNegativeMarkingStatus(this.quiz_id);
-    //   },
-    //   set() {
-    //     this.$store.dispatch('toggleNegativeMarking');
-    //   }         
-    // }, 
   },
   components: {
     timer,
@@ -222,32 +187,6 @@ export default {
     if (this.getCurrentQues(this.quiz_id) > this.getTotalQues(this.quiz_id)) {
       this.quiz_over = true;
     }
-    // if (this.getId && this.getName && this.getQuiz) {
-        // debugger
-      // this.setQuestion();
-      // var stopwatch = setInterval(function(){
-      //   // debugger
-      //   if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
-      //     this.setQuestion();
-      //     this.updateCurrentQues();
-      //   } else {
-      //     this.quiz_over = true;
-      //     clearInterval(stopwatch);
-      //   }
-      // }, this.getInterval(this.quiz_id)*1000);
-      // var askQuestions = () => {
-      //   // console.log(this,this.getCurrentQues(this.quiz_id),this.getTotalQues(this.quiz_id));        
-      //     console.log(this, stopwatch);        
-      //   // if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
-      //   //   this.setQuestion();
-      //   //   this.updateCurrentQues();
-      //   // } else {
-      //   //   this.quiz_over = true;
-      //   //   clearInterval(stopwatch);
-      //   // }
-      // };
-    // }
-    // this.name = `quiz#${this.id}`;
   }
 }
 </script>
@@ -259,7 +198,6 @@ export default {
       -webkit-appearance: none;
       margin: 0;
   }
-
   input[type="number"] {
       -moz-appearance: textfield;
   }
@@ -267,18 +205,13 @@ export default {
   .card {
     padding: 0;
     margin: 10px;
-    /* height: auto; */
-    /* max-height: 250px; */
   }
   .form-row, .form-check {
     margin-top: 15px;
     margin-bottom: 15px;
-    /* margin: 20px; */
   }
-
   .timer {
     padding: 10px;
     border-radius: 5px;
-    /* margin: 10px; */
   }
 </style>

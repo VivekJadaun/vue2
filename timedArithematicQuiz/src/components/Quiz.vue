@@ -1,0 +1,284 @@
+<template>
+  <div class="quiz card text-center col-5">
+    <div class="card-header">
+      Quiz #{{quiz_id}}
+    </div>
+
+    <div class="card-body">
+      <div v-if="getId && getName && !quiz_over">
+        <br>
+        <h5 class="card-title">
+          <span class="bg-dark text-white timer">
+            Seconds Left: <timer :interval="getInterval(quiz_id)"></timer>
+          </span>
+        </h5>
+        <br>
+        <!-- <input type="text" :value="secsLeft"> -->
+        <!-- <h6 class="card-subtitle mb-2 text-muted">Q {{ getCurrentQues(this.quiz_id) }}</h6> -->
+        <div class="input-group mb-3">
+          <!-- <span class="badge badge-light ">Q {{ getCurrentQues(this.quiz_id) }} :</span> -->
+          <div class="input-group-prepend">
+            <span class="input-group-text">Q {{ getCurrentQues(this.quiz_id) }}</span>
+            <span class="input-group-text">{{ question }} =</span>
+          </div>
+          <input ref="answer" type="text" class="form-control" :placeholder="hint" @keyup.enter="checkAnswer()" autofocus>
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" @click="checkAnswer()">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="!getId && !quiz_over">
+        <div class="form-group text-left">
+          <div class="form-row ">
+            <label for="questionsCount" class="col-sm-6 col-form-label">Total questions</label>
+            <input id="questionsCount" type="number" class="form-control col-6" :value="getTotalQues(quiz_id)" @input="updateTotalQues({id:quiz_id, totalQues:$event.target.value})">
+          </div>
+          <div class="form-row ">
+            <label for="interval" class="col-sm-6 col-form-label">Timer interval</label>
+            <!-- <input id="interval" type="number" class="form-control col-sm-6" placeholder="in seconds" v-model="interval"> -->
+            <div class="input-group col-6">
+              <input id="interval" type="number" class="form-control" :value="getInterval(quiz_id)" @input="updateInterval({id:quiz_id, interval:$event.target.value})" >
+              <div class="input-group-append">
+                <span class="input-group-text" id="seconds">seconds</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" :checked="getNegativeMarkingStatus(quiz_id)" @input="toggleNegativeMarking(quiz_id)">
+            <label class="form-check-label" for="exampleCheck1">Negative marking</label>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="quiz_over">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Total Questions
+            <span class="badge badge-primary badge-pill">{{ getTotalQues(quiz_id) }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Correct Answers
+            <span class="badge badge-success badge-pill">{{ getCorrect(quiz_id) }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Incorrect Answers
+            <span class="badge badge-danger badge-pill">{{ getIncorrect(quiz_id) }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Unanswered Questions
+            <span class="badge badge-secondary badge-pill">{{ getNotAnswered(quiz_id) }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div v-if="getId && !quiz_over" class="card-footer text-muted">
+        <div class="d-flex justify-content-around row">
+          <div class="">
+            <h5>Correct <span class="badge badge-success">{{ getCorrect(quiz_id) }}</span></h5>
+          </div>
+          <div class="">
+            <h5>Incorrect <span class="badge badge-danger">{{ getIncorrect(quiz_id) }}</span></h5>
+          </div>
+          <div class="">
+            <h5>Unanswered <span class="badge badge-secondary">{{ getNotAnswered(quiz_id) }}</span></h5>
+          </div>
+          <div class="">
+            <h5>Total <span class="badge badge-primary">{{ getTotalQues(quiz_id) }}</span></h5>
+          </div>
+        </div>
+    </div>
+  </div>
+</template>
+
+<script>
+// import { quizInfo } from "../constants";
+import timer from "./Timer.vue";
+import { mapGetters, mapActions } from 'vuex';
+export default {
+  data() {
+    return {
+      // ...quizInfo,
+      // launched: !!window.localStorage.getItem('launchTime'),
+      // name: '',
+      quiz_over: false,
+      question: '',
+      hint: '',
+    }
+  },
+  watch: {
+    getId() {
+      this.setQuestion();
+      // console.log('in watcher, id changed',this.getInterval(this.quiz_id));      
+      var stopwatch = setInterval(() => {
+        if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
+          this.checkAnswer();
+        } else {
+          this.quiz_over = true;
+          clearInterval(stopwatch);
+        }
+      }, this.getInterval(this.quiz_id)*1000);
+    },
+  },
+  props: {
+    'quiz_id': {
+      type: [Number, String],
+      required: true,
+    },
+  },
+  computed: {
+    ...mapGetters([
+      'getId',
+      'getName',
+      'getQuiz',
+      'getInterval',
+      'getTotalQues',
+      'getNegativeMarkingStatus',
+      'getMinValue',
+      'getMaxValue',
+      'getOperators',
+      'getHint',
+      'getCurrentQues',
+      'getCorrect',
+      'getIncorrect',
+      'getNotAnswered',
+    ]),
+    
+    // interval: {
+    //   get() {
+    //     console.log(this.quiz_id);        
+    //     this.$store.getters.getInterval(this.quiz_id);
+    //   },
+    //   set(value) {
+    //     this.$store.dispatch('updateInterval', value);
+    //   }         
+    // }, 
+    // totalQues: {
+    //   get() {
+    //     this.$store.getters.getTotalQues(this.quiz_id);
+    //   },
+    //   set(value) {
+    //     this.$store.dispatch('updateTotalQues', value);
+    //   }         
+    // }, 
+    // negativeMarking: {
+    //   get() {
+    //     this.$store.getters.getNegativeMarkingStatus(this.quiz_id);
+    //   },
+    //   set() {
+    //     this.$store.dispatch('toggleNegativeMarking');
+    //   }         
+    // }, 
+  },
+  components: {
+    timer,
+  },
+  methods: {
+    ...mapActions([
+      'toggleNegativeMarking',
+      'updateTotalQues',
+      'updateInterval',
+      'updateCurrentQues',
+      'updateAnswers',
+    ]),
+    evaluate(expression) {
+      return new Function('return ' + expression)();
+    },
+    getRandomOperand() {
+      return Math.trunc(Math.random() * (this.getMaxValue - this.getMinValue + 1)) + this.getMinValue;
+    },
+    setQuestion() {
+      if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
+        let index = Math.trunc(Math.random() * this.getOperators.length);  
+        index = (index < this.getOperators.length) ? index : 0;
+        let operator = this.getOperators[index];
+        this.hint = (operator === '/') ? this.getHint : '';
+        let firstOperand = this.getRandomOperand();
+        let secondOperand = this.getRandomOperand();
+        this.question = `${firstOperand} ${operator} ${secondOperand}`;
+        return this.question;        
+      }
+    },
+    checkAnswer() {
+      let answer = this.$refs.answer.value.trim();
+      if (answer) {
+
+        if (answer == this.evaluate(this.question)) {
+          this.updateAnswers({answer: 1, id: this.quiz_id});
+        } else {
+          this.updateAnswers({answer: -1, id: this.quiz_id});
+        }
+        
+      } else {
+        this.updateAnswers({answer: 0, id: this.quiz_id});
+      }
+      this.$refs.answer.value = '';
+      this.updateCurrentQues(this.quiz_id);
+      this.setQuestion();
+    },
+  },
+  created() {
+    if (this.getCurrentQues(this.quiz_id) > this.getTotalQues(this.quiz_id)) {
+      this.quiz_over = true;
+    }
+    // if (this.getId && this.getName && this.getQuiz) {
+        // debugger
+      // this.setQuestion();
+      // var stopwatch = setInterval(function(){
+      //   // debugger
+      //   if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
+      //     this.setQuestion();
+      //     this.updateCurrentQues();
+      //   } else {
+      //     this.quiz_over = true;
+      //     clearInterval(stopwatch);
+      //   }
+      // }, this.getInterval(this.quiz_id)*1000);
+      // var askQuestions = () => {
+      //   // console.log(this,this.getCurrentQues(this.quiz_id),this.getTotalQues(this.quiz_id));        
+      //     console.log(this, stopwatch);        
+      //   // if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
+      //   //   this.setQuestion();
+      //   //   this.updateCurrentQues();
+      //   // } else {
+      //   //   this.quiz_over = true;
+      //   //   clearInterval(stopwatch);
+      //   // }
+      // };
+    // }
+    // this.name = `quiz#${this.id}`;
+  }
+}
+</script>
+
+
+<style scoped>
+/* Hide HTML5 Up and Down arrows. */
+  input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+
+  input[type="number"] {
+      -moz-appearance: textfield;
+  }
+
+  .card {
+    padding: 0;
+    margin: 10px;
+    /* height: auto; */
+    /* max-height: 250px; */
+  }
+  .form-row, .form-check {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    /* margin: 20px; */
+  }
+
+  .timer {
+    padding: 10px;
+    border-radius: 5px;
+    /* margin: 10px; */
+  }
+</style>

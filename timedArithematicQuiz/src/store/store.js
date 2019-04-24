@@ -14,12 +14,14 @@ export const store = new Vuex.Store({
     getName: (state) => state.name,
     getId: (state) => state.id,
     getQuiz: (state) => state.quiz,
+    getParsedQuiz: (state) => JSON.parse(state.quiz),
     getMinValue: (state) => state.minValue,
     getMaxValue: (state) => state.maxValue,
     getOperators: (state) => state.operators,
     getHint: (state) => state.hint,
     getQuizIds: (state) => JSON.parse(state.quiz).map(({ id }) => id),
     getInterval: (state) => (id) => JSON.parse(state.quiz).find(quiz_item => quiz_item.id == id).interval,
+    getElapsed: (state) => (id) => JSON.parse(state.quiz).find(quiz_item => quiz_item.id == id).elapsed,
     getTotalQues: (state) => (id) => JSON.parse(state.quiz).find(quiz_item => quiz_item.id == id).totalQues,
     getCurrentQues: (state) => (id) => JSON.parse(state.quiz).find(quiz_item => quiz_item.id == id).currentQues,
     getNegativeMarkingStatus: (state) => (id) => JSON.parse(state.quiz).find(quiz_item => quiz_item.id == id).negativeMarking,
@@ -56,7 +58,7 @@ export const store = new Vuex.Store({
         window.alert('Can\'t remove the last quiz');
       }
     },
-    updateCurrentQues: (state, payload) => {
+    incrementCurrentQues: (state, payload) => {
       let quiz = JSON.parse(state.quiz);
       quiz.find(el => el.id == payload).currentQues += 1;
       state.quiz = JSON.stringify(quiz);
@@ -76,9 +78,14 @@ export const store = new Vuex.Store({
       quiz.find(el => el.id == payload).negativeMarking = !quiz.find(el => el.id == payload).negativeMarking;
       state.quiz = JSON.stringify(quiz);
     },
-    updateTimerState: (state, payload) => {
+    resetElapsed: (state, payload) => {
       let quiz = JSON.parse(state.quiz);
-      quiz[payload.id - 1].timerState = payload.timerState;
+      quiz.find(el => el.id == payload).elapsed = 0;
+      state.quiz = JSON.stringify(quiz);
+    },
+    incrementElapsed: (state, payload) => {
+      let quiz = JSON.parse(state.quiz);
+      quiz.find(el => el.id == payload).elapsed += 1;
       state.quiz = JSON.stringify(quiz);
     },
     updateAnswers: (state, { id, answer }) => {
@@ -105,8 +112,8 @@ export const store = new Vuex.Store({
       commit('removeQuiz')
       commit('updateQuiz');        
     },
-    updateCurrentQues: ({ commit }, payload) => {
-      commit('updateCurrentQues', payload);
+    incrementCurrentQues: ({ commit }, payload) => {
+      commit('incrementCurrentQues', payload);
       commit('updateQuiz');
     },
     updateTotalQues: ({ commit }, payload) => {
@@ -121,8 +128,12 @@ export const store = new Vuex.Store({
       commit('toggleNegativeMarking', payload);
       commit('updateQuiz');  
     },
-    updateTimerState: ({ commit }, payload) => {
-      commit('updateTimerState', payload);
+    resetElapsed: ({ commit }, payload) => {
+      commit('resetElapsed', payload);
+      commit('updateQuiz');  
+    },
+    incrementElapsed: ({ commit }, payload) => {
+      commit('incrementElapsed', payload);
       commit('updateQuiz');  
     },
     updateAnswers: ({ commit }, payload) => {

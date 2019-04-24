@@ -2,7 +2,7 @@
   <div id="app" class="container-fluid">
     <header-nav></header-nav>
     <div id="quiz-container" class="container col-12 justify-content-around d-flex ">
-      <quiz v-for="(quiz_id, index) in getQuizIds" :key="index" :quiz_id="quiz_id"></quiz>
+      <quiz v-for="(quiz_id, index) in getQuizIds" :key="index" :elapsed="getParsedQuiz[index].elapsed" :quiz_id="quiz_id"></quiz>
     </div>
     <footer-nav></footer-nav>
   </div>
@@ -18,7 +18,8 @@ import { mapGetters } from 'vuex';
 export default {
   computed: {
     ...mapGetters([
-      'getQuizIds'
+      'getQuizIds',
+      'getParsedQuiz',
     ]),
   },
   components: {

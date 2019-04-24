@@ -9,18 +9,18 @@
         <br>
         <h5 class="card-title">
           <span class="bg-dark text-white timer">
-            Seconds Left: <timer :interval="getInterval(quiz_id)"></timer>
+            Seconds Left: <span>{{ getInterval(quiz_id) - getElapsed(quiz_id) }}</span>
           </span>
         </h5>
         <br>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text">Q {{ getCurrentQues(this.quiz_id) }}</span>
+            <span class="input-group-text">Q {{ getCurrentQues(quiz_id) }}</span>
             <span class="input-group-text">{{ question }} =</span>
           </div>
-          <input ref="answer" type="text" class="form-control" :placeholder="hint" @keyup.enter="checkAnswer()" autofocus>
+          <input ref="answer" type="text" class="form-control" :placeholder="hint" @keyup.enter="prepareNextQues()" autofocus>
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" @click="checkAnswer()">Next</button>
+            <button class="btn btn-outline-secondary" type="button" @click="prepareNextQues()">Next</button>
           </div>
         </div>
       </div>
@@ -51,19 +51,19 @@
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center">
             Total Questions
-            <span class="badge badge-primary badge-pill">{{ getTotalQues(quiz_id) }}</span>
+            <span class="badge badge-primary">{{ getTotalQues(quiz_id) }}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
             Correct Answers
-            <span class="badge badge-success badge-pill">{{ getCorrect(quiz_id) }}</span>
+            <span class="badge badge-success">{{ getCorrect(quiz_id) }}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
             Incorrect Answers
-            <span class="badge badge-danger badge-pill">{{ getIncorrect(quiz_id) }}</span>
+            <span class="badge badge-danger">{{ getIncorrect(quiz_id) }}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
             Unanswered Questions
-            <span class="badge badge-secondary badge-pill">{{ getNotAnswered(quiz_id) }}</span>
+            <span class="badge badge-secondary">{{ getNotAnswered(quiz_id) }}</span>
           </li>
         </ul>
       </div>
@@ -89,7 +89,6 @@
 </template>
 
 <script>
-import timer from "./Timer.vue";
 import { mapGetters, mapActions } from 'vuex';
 export default {
   data() {
@@ -102,21 +101,25 @@ export default {
   watch: {
     getId() {
       this.setQuestion();
-      var stopwatch = setInterval(() => {
-        if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
-          this.checkAnswer();
-        } else {
-          this.quiz_over = true;
-          clearInterval(stopwatch);
-        }
-      }, this.getInterval(this.quiz_id)*1000);
+      this.stopTimer = setInterval(() => {
+          this.incrementElapsed(this.quiz_id);
+        }, 1000);
     },
+    elapsed(elapsedTime) {
+      if (elapsedTime >= this.getInterval(this.quiz_id)) {
+        this.prepareNextQues();
+      }
+    }
   },
   props: {
     'quiz_id': {
       type: [Number, String],
       required: true,
     },
+    'elapsed': {
+      type: [Number, String],
+      required: true, 
+    }
   },
   computed: {
     ...mapGetters([
@@ -124,6 +127,7 @@ export default {
       'getName',
       'getQuiz',
       'getInterval',
+      'getElapsed',
       'getTotalQues',
       'getNegativeMarkingStatus',
       'getMinValue',
@@ -136,17 +140,19 @@ export default {
       'getNotAnswered',
     ]),
   },
-  components: {
-    timer,
-  },
   methods: {
     ...mapActions([
       'toggleNegativeMarking',
       'updateTotalQues',
       'updateInterval',
-      'updateCurrentQues',
+      'incrementCurrentQues',
       'updateAnswers',
+      'resetElapsed',
+      'incrementElapsed',
     ]),
+    endTimer() {
+      clearInterval(this.stopTimer);
+    },
     evaluate(expression) {
       return new Function('return ' + expression)();
     },
@@ -154,16 +160,14 @@ export default {
       return Math.trunc(Math.random() * (this.getMaxValue - this.getMinValue + 1)) + this.getMinValue;
     },
     setQuestion() {
-      if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
-        let index = Math.trunc(Math.random() * this.getOperators.length);  
-        index = (index < this.getOperators.length) ? index : 0;
-        let operator = this.getOperators[index];
-        this.hint = (operator === '/') ? this.getHint : '';
-        let firstOperand = this.getRandomOperand();
-        let secondOperand = this.getRandomOperand();
-        this.question = `${firstOperand} ${operator} ${secondOperand}`;
-        return this.question;        
-      }
+      let index = Math.trunc(Math.random() * this.getOperators.length);  
+      index = (index < this.getOperators.length) ? index : 0;
+      let operator = this.getOperators[index];
+      this.hint = (operator === '/') ? this.getHint : '';
+      let firstOperand = this.getRandomOperand();
+      let secondOperand = this.getRandomOperand();
+      this.question = `${firstOperand} ${operator} ${secondOperand}`;
+      return this.question;    
     },
     checkAnswer() {
       let answer = this.$refs.answer.value.trim();
@@ -179,14 +183,29 @@ export default {
         this.updateAnswers({answer: 0, id: this.quiz_id});
       }
       this.$refs.answer.value = '';
-      this.updateCurrentQues(this.quiz_id);
-      this.setQuestion();
+      this.incrementCurrentQues(this.quiz_id);
     },
+    prepareNextQues() {
+      if (this.getCurrentQues(this.quiz_id) < this.getTotalQues(this.quiz_id)) {
+        this.endTimer();
+        this.resetElapsed(this.quiz_id);
+        this.checkAnswer();
+        this.setQuestion();
+        this.stopTimer = setInterval(() => {
+          this.incrementElapsed(this.quiz_id);
+        }, 1000);
+      } else {
+        this.quiz_over = true;
+        this.endTimer();
+        this.resetElapsed(this.quiz_id);
+        this.checkAnswer();
+      }
+    }
   },
   created() {
     if (this.getCurrentQues(this.quiz_id) > this.getTotalQues(this.quiz_id)) {
       this.quiz_over = true;
-    }
+    }    
   }
 }
 </script>

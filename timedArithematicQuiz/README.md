@@ -2,7 +2,7 @@
 
 > A timer based arithematic quiz built using vue2.9.6
 
-# CHECKOUT THE DEPLOYED APP: 
+CHECKOUT THE DEPLOYED APP: 
   
 > https://vivekjadaun.github.io/
   

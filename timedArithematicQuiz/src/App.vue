@@ -12,14 +12,14 @@
       <ul class="nav nav-pills justify-content-between">
         <template v-if="!getLaunchTime">
           <li class="nav-item">
-            <button class="btn btn-primary" @click="addQuiz()" >Add Quiz</button>
+            <button class="btn btn-success" @click="addQuiz()" >Add Quiz</button>
           </li>
           <li class="nav-item">
-            <button class="btn btn-primary" @click="removeQuiz()">Remove Quiz</button>
+            <button class="btn btn-danger" @click="removeQuiz()">Remove Quiz</button>
           </li>
         </template>
         <li class="nav-item">
-          <button @click="resetState()" class="btn btn-primary">Reset</button>
+          <button @click="resetState()" class="btn btn-light">Reset</button>
         </li>
       </ul>
     </div>
@@ -120,7 +120,6 @@ export default {
   }
   .navbar {
     color: #fff;
-    /* text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5); */
     box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
     padding-bottom: 10px;
     padding-top: 10px;
@@ -130,12 +129,5 @@ export default {
   }
   .bg-custom {
     background-color: #252830;
-  }
-  .btn {
-    color: #fff;
-    background-color: transparent;  
-  }
-  .btn:hover {
-    background-color: #007bff;  
   }
 </style>

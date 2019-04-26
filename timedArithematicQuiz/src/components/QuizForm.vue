@@ -31,11 +31,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 export default {
-  data() {
-    return {
-    //   quiz: null,
-    }
-  },
   props: ['quizIndex'],
   computed: {
     ...mapGetters([
@@ -48,9 +43,6 @@ export default {
       'updateInterval',
       'toggleNegativeMarking',
     ]),
-  },
-  created() {
-    // console.log(this.quizIndex, this.getQuiz[this.quizIndex]);
   },
 }
 </script>

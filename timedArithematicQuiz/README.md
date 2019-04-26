@@ -4,11 +4,11 @@
 
 CHECKOUT THE DEPLOYED APP: 
   
-  https://vivekjadaun.github.io/
+> https://vivekjadaun.github.io/
   
   OR
   
-  https://timed-arithematic-quiz.firebaseapp.com/
+> https://timed-arithematic-quiz.firebaseapp.com/
 
 ## Build Setup
 

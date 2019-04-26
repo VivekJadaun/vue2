@@ -2,6 +2,8 @@
 
 > A timer based arithematic quiz built using vue2.9.6
 
+CHECKOUT THE DEPLOYED SITE: https://vivekjadaun.github.io/
+
 ## Build Setup
 
 ``` bash

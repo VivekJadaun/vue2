@@ -7,7 +7,7 @@ Vue.use(Vuex);
 const INITIAL_STATE = {
   name: '',
   launchTime: undefined,
-  quiz: [sampleQuiz],
+  quiz: [{...sampleQuiz}],
   minValue: 0,
   maxValue: 10,
   operators: ['-', '+', '/', '*'],
@@ -16,13 +16,7 @@ const INITIAL_STATE = {
 
 export const store = new Vuex.Store({
   state: {
-    name: '',
-    launchTime: undefined,
-    quiz: [{...sampleQuiz}],
-    minValue: 0,
-    maxValue: 10,
-    operators: ['-', '+', '/', '*'],
-    hint: 'Round off your answer to 2 decimal places.',
+    ...INITIAL_STATE,
   },
   
   getters: {
@@ -40,6 +34,7 @@ export const store = new Vuex.Store({
     resetState: (state) => {
       Object.assign(state, { ...INITIAL_STATE });
       window.location.hash = '';
+      window.location.reload();
     },
 
     loadState: (state, intermediateState) => {
